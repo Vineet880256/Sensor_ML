@@ -7,7 +7,7 @@ def get_requirements()->List[str]:
     """
     requirement_list:List[str] = []
 
-    requirement_items = open('C:/Users/vinee/PGP-Data Science/Industry-Ready-Project/Sensor-Fault-Detection-System/sensor-fault-detection/requirements.txt', 'r')
+    requirement_items = open('requirements.txt', 'r')
     """ for item in requirement_items:
         requirement_list.append(item) """
     
