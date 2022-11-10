@@ -55,16 +55,11 @@ async def train_route():
         return Response(f"Error Occurred! {e}")
 
 @app.get("/predict")
-async def predict_route(file: UploadFile):
+async def predict_route():
     try:
-        if not file:
-            return "File is not uploaded"
-        else:
-            content = file.read()
 
         df=None
-        df = pd.DataFrame(content)
-        print(df.head(5))
+        
         model_resolver = ModelResolver(model_dir=SAVED_MODEL_DIR)
         if not model_resolver.is_model_exists():
             return Response("Model is not available")
