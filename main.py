@@ -4,10 +4,9 @@ import os,sys
 from sensor.logger import logging
 from sensor.pipeline import training_pipeline
 from sensor.pipeline.training_pipeline import TrainPipeline
-import os
 from sensor.utils.main_utils import read_yaml_file
 from sensor.constant.training_pipeline import SAVED_MODEL_DIR
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile
 from sensor.constant.application import APP_HOST, APP_PORT
 from starlette.responses import RedirectResponse
 from uvicorn import run as app_run
@@ -15,7 +14,8 @@ from fastapi.responses import Response
 from sensor.ml.model.estimator import ModelResolver,TargetValueMapping
 from sensor.utils.main_utils import load_object
 from fastapi.middleware.cors import CORSMiddleware
-import os
+import pandas as pd
+
 
 env_file_path=os.path.join(os.getcwd(),"env.yaml")
 
@@ -55,12 +55,16 @@ async def train_route():
         return Response(f"Error Occurred! {e}")
 
 @app.get("/predict")
-async def predict_route():
+async def predict_route(file: UploadFile):
     try:
-        #get data from user csv file
-        #conver csv file to dataframe
+        if not file:
+            return "File is not uploaded"
+        else:
+            content = file.read()
 
         df=None
+        df = pd.DataFrame(content)
+        print(df.head(5))
         model_resolver = ModelResolver(model_dir=SAVED_MODEL_DIR)
         if not model_resolver.is_model_exists():
             return Response("Model is not available")
